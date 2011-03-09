@@ -8,9 +8,6 @@ __author__ = 'schrepfer'
 
 import inspect
 import logging
-import types
-import time
-import traceback
 import Queue
 
 def event(event, priority=0):
@@ -69,7 +66,7 @@ class EventManager(object):
       return
     callbacks = self._events.setdefault(event, [])
     position = 0
-    for f, i, p in callbacks:
+    for f, p in callbacks:
       if priority < p:
         break
       position += 1

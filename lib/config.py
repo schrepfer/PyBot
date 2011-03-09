@@ -10,9 +10,9 @@ import ConfigParser
 import os
 
 
-def readConfig(config_file, format=None):
-  if format is None:
-    format = {
+def readConfig(config_file, config_format=None):
+  if config_format is None:
+    config_format = {
       'character': ['name', 'password'],
       'server': ['address', 'port'],
       }
@@ -22,7 +22,7 @@ def readConfig(config_file, format=None):
   config = ConfigParser.ConfigParser()
   config.read(config_file)
 
-  for section, options in format.iteritems():
+  for section, options in config_format.iteritems():
     assert config.has_section(section), 'Missing section: %s' % section
     for option in options:
       assert config.has_option(section, option), 'Missing option: %s > %s' % (section, option)

@@ -10,7 +10,6 @@ import fnmatch
 import inspect
 import logging
 import re
-import sys
 
 from lib import connection
 from lib import engine

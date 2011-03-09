@@ -8,7 +8,6 @@ __author__ = 'schrepfer'
 
 import locale
 import logging
-import sys
 import telnetlib
 import select
 import socket
@@ -46,6 +45,7 @@ class Connection(object):
     logging.info('Connecting to %s port %d..', address, port)
     try:
       self._telnet.open(address, port)
+      self._telnet.sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
     except socket.error:
       logging.error('Could not connect to server')
       self.engine.eventManager.triggerEvent(events.CONFAIL)

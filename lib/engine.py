@@ -6,12 +6,8 @@
 
 __author__ = 'schrepfer'
 
-import ConfigParser
-import getpass
 import logging
-import optparse
 import os
-import re
 import select
 import sys
 import threading
