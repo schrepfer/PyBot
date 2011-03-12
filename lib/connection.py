@@ -69,12 +69,11 @@ class Connection(object):
     previousLine = ''
 
     while self.running():
-      # Add some code to detect a connection that has died abnormally..
       if not select.select([self._telnet], [], [], 0.2)[0]:
         continue
       try:
         data = self._telnet.read_eager()
-      except EOFError:
+      except (EOFError, socket.error):
         logging.info('Connection closed')
         self.disconnect()
         break
