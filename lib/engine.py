@@ -55,6 +55,13 @@ class Engine(object):
       break
     self.cleanupThreads()
 
+  def isTimer(self, name):
+    self.cleanupThreads()
+    for timer in self._timers:
+      if timer.getName() == name:
+        return True
+    return False
+
   def cleanupThreads(self):
     self._threads = [t for t in self._threads if t.isAlive()]
     self._timers = [t for t in self._timers if t.isAlive()]
@@ -73,7 +80,8 @@ class Engine(object):
         while self.running():
           if not select.select([sys.stdin], [], [], 0.2)[0]:
             continue
-          sys.stdin.readline()
+          input = sys.stdin.readline()
+          self._eventManager.triggerEvent(events.INPUT, input.rstrip())
       except KeyboardInterrupt:
         self.shutdown()
         print

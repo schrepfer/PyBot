@@ -10,6 +10,7 @@ import fnmatch
 import inspect
 import logging
 import re
+import sre_constants
 
 from lib import connection
 from lib import engine
@@ -21,17 +22,19 @@ ANSI_COLOR_PATTERN = re.compile(chr(27) + r'\[[\d;]*m')
 
 class Matcher(object):
 
-  def __init__(self, pattern, priority=0, fallthrough=True):
+  def __init__(self, pattern, priority=0, fallthrough=True, raw=False):
     """Constructor.
 
     Args:
       pattern: String
       priority: Integer; Lower priority comes first.
       fallthrough: Boolean; Keep matching after a successful match.
+      raw: Boolean; This matcher should use the raw output.
     """
     self._pattern = pattern
     self._priority = priority
     self._fallthrough = fallthrough
+    self._raw = raw
 
   def __cmp__(self, other):
     return cmp(self._priority, other._priority)
@@ -48,16 +51,25 @@ class Matcher(object):
   def pattern(self):
     return self._pattern
 
+  @property
+  def raw(self):
+    return self._raw
+
   def match(self, line):
     return None
+
 
 class RegExpMatcher(Matcher):
 
   def match(self, line):
-    match = re.match(self._pattern, line)
+    try:
+      match = re.search(self._pattern, line)
+    except sre_constants.error:
+      return None
     if match:
       return (line,) + match.groups()
     return None
+
 
 class GlobMatcher(Matcher):
 
@@ -65,6 +77,7 @@ class GlobMatcher(Matcher):
     if fnmatch.fnmatch(line, self._pattern):
       return line
     return None
+
 
 class SimpleMatcher(Matcher):
 
@@ -114,9 +127,12 @@ class Bot(object):
 
   @events.event(events.READ)
   def onRead(self, line):
-    line = ANSI_COLOR_PATTERN.sub('', line)
+    stripped = ANSI_COLOR_PATTERN.sub('', line)
     for matcher, callback in self._triggers:
-      match = matcher.match(line)
+      if matcher.raw:
+        match = matcher.match(line)
+      else:
+        match = matcher.match(stripped)
       if match is None:
         continue
       logging.debug('trigger %s', callback.func_name)
