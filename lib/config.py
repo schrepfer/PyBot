@@ -19,7 +19,7 @@ def readConfig(config_file, config_format=None):
 
   assert os.path.isfile(config_file), 'Missing config file: %s' % config_file
 
-  config = ConfigParser.ConfigParser()
+  config = ConfigParser.RawConfigParser()
   config.read(config_file)
 
   for section, options in config_format.iteritems():
@@ -29,5 +29,3 @@ def readConfig(config_file, config_format=None):
       assert config.get(section, option), 'Must not be blank: %s > %s' % (section, option)
 
   return config
-
-

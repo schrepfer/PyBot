@@ -60,6 +60,7 @@ class Connection(object):
   @events.event(events.SHUTDOWN)
   def onShutdown(self):
     self.disconnect()
+    return True
 
   def start(self):
     self._sent = 0
