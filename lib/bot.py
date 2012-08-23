@@ -101,6 +101,7 @@ class Bot(object):
   def __init__(self):
     self._triggers = []
     self._previousLine = ''
+    self._previousLineRaw = ''
     self._engine = engine.Engine()
     self._connection = connection.Connection(self._engine)
     events.registerEvents(self, self._engine)
@@ -139,7 +140,8 @@ class Bot(object):
       callback(match)
       if not matcher.fallthrough:
         break
-    self._previousLine = line
+    self._previousLine = stripped
+    self._previousLineRaw = line
     return True
 
   def start(self):
