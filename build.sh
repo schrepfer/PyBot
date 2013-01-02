@@ -14,7 +14,7 @@ cd $ROOT
 zip -x '.*' -x '*.pyc' -r - . > $ZIP.$TIME
 
 # Add interpreter
-echo '#!/usr/bin/env python2.6' | cat - $ZIP.$TIME > $ZIP
+echo '#!/usr/bin/env python2' | cat - $ZIP.$TIME > $ZIP
 
 # Make executable
 chmod u+x $ZIP
