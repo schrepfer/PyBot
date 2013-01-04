@@ -12,7 +12,7 @@ import telnetlib
 import select
 import socket
 
-from lib import events
+import events
 
 
 class Connection(object):

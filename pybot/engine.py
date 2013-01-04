@@ -12,7 +12,7 @@ import select
 import sys
 import threading
 
-from lib import events
+import events
 
 
 class Engine(object):

@@ -12,9 +12,9 @@ import logging
 import re
 import sre_constants
 
-from lib import connection
-from lib import engine
-from lib import events
+import connection
+import engine
+import events
 
 
 ANSI_COLOR_PATTERN = re.compile(chr(27) + r'\[[\d;]*m')
